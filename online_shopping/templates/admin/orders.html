@@ -1,0 +1,81 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h2 class="mt-5">مدیریت سفارش ها</h2>
+<table class="col table table-striped mt-4 text-center">
+    <thead>
+        <tr>
+            <th>
+                نام کاربری
+            </th>
+            <th>
+                مجموع مبلغ
+            </th>
+            <th>
+                زمان ثبت سفارش
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for order in orders%}
+        <tr>
+            <td>{{ order.customerFirstName }} {{ order.customerLastName }}</td>
+            <td>{{ order.amount | format_currency }}</td>
+            <td>{{ order.date | jalali_date("%Y/%m/%d") }}</td>
+            <td>
+                <button type="button" class="order-check btn btn-link btn-sm" data-order-id="{{ order._id }}">
+                    <span class="order-check-text">بررسی سفارش</span>
+                    <span class="visually-hidden spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="order-check-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">جزئیات سفارش</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">نام مشتری:  <span dir='auto' class='customer-fullname'></span></li>
+                    <li class="list-group-item">آدرس:  <span dir='auto' class='customer-address d-flex'></span></li>
+                    <li class="list-group-item">تلفن:  <span dir='auto' class='customer-cellphone-number'></span></li>
+                    <li class="list-group-item">زمان تحویل:  <span dir='auto' class='customer-delivery-date'></span></li>
+                    <li class="list-group-item">زمان سفارش:  <span dir='auto' class='customer-order-date'></span></li>
+                </ul>
+                <br><br>
+                <table class="table table-striped">
+                    <thead>
+                        <th>#</th>
+                        <th>کالا</th>
+                        <th>قیمت</th>
+                        <th>انبار</th>
+                        <th>تعداد</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="pro-id"></td>
+                            <td class="pro-name"><a href="#"></a></td>
+                            <td class="pro-price"></td>
+                            <td class="pro-warehouse"></td>
+                            <td class="pro-quantity"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/orders.js') }}"></script>
+{% endblock %}

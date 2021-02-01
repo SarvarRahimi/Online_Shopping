@@ -1,0 +1,249 @@
+{% extends 'admin/base.html' %} {% block content %}
+<h2 class="mb-3 mt-4">مدیریت کالا ها</h2>
+<div class="my-3 text-right">
+  <button
+    type="button"
+    class="btn btn-success addProduct"
+    data-bs-toggle="modal"
+    data-bs-target="#addModal"
+  >
+    افزودن کالا
+  </button>
+  <button
+    type="button"
+    class="btn btn-success importFile"
+    data-bs-toggle="modal"
+    data-bs-target="#importModal"
+  >
+      import
+    </button>
+</div>
+<table class="col table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>تصویر</th>
+      <th>نام کالا</th>
+      <th>دسته بندی</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr data-product-id="{{ product._id }}">
+      <td><img src="{{ product.image }}" width="75px" height="75px" /></td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>
+        <button
+{#          data-product-id="{{ product._id }}"#}
+          type="button"
+          class="btn btn-link editProduct"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal"
+        >
+          ویرایش
+        </button>
+        <button
+{#          data-product-id="{{ product._id }}"#}
+          type="button"
+          class="btn btn-link deleteProduct"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+        >
+          حذف
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- add Modal -->
+<div
+  class="modal fade"
+  id="addModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">افزودن کالا</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="productName" class="form-label">نام کالا</label>
+            <input type="text" class="form-control productName" id="productName" />
+            <label for="formFileSm" class="form-label">عکس</label>
+            <input
+              class="form-control form-control-sm productImage"
+              id="productImage"
+              type="file"
+            />
+            <label for="category" class="form-label">دسته بندی</label>
+            <select class="form-select productCategory" aria-label="Default select example">
+              <option selected>انتخاب دسته</option>
+              {% for category in categories %}
+              <option>{{ category }}</option>
+              {% endfor %}
+            </select>
+            <label for="description" class="form-label">توضیحات:</label>
+            <input
+              type="text"
+              class="form-control productDescription"
+              aria-label="Text input with segmented dropdown button"
+              id="description"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          بستن
+        </button>
+        <button type="button" class="btn btn-primary saveBtnAdd">
+          ذخیره
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">ویرایش کالا</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="productName" class="form-label">نام کالا</label>
+            <input type="text" class="form-control productName" id="productName" />
+            <label for="productCategory" class="form-label">دسته بندی</label>
+            <select
+              class="form-select productCategory"
+              aria-label="Default select example"
+              id="productCategory"
+            >
+              <option selected>انتخاب دسته</option>
+              {% for category in categories %}
+              <option>{{ category }}</option>
+              {% endfor %}
+            </select>
+            <label for="description" class="form-label">توضیحات:</label>
+            <input
+              type="text"
+              class="form-control productDescription"
+              aria-label="Text input with segmented dropdown button"
+              id="productDescription"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          بستن
+        </button>
+        <button type="button" class="btn btn-primary saveBtnEdit">
+          ذخیره
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">حذف کالا</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>کالا حذف شود?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          خیر
+        </button>
+        <button type="button" class="btn btn-primary saveBtnDelete">
+          بله
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{#Import Modal#}
+    <div
+  class="modal fade"
+  id="importModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">آپلود فایل</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+          <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          خیر
+        </button>
+        <button type="button" class="btn btn-primary saveBtnImport">
+          بله
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %} {{ super() }}
+<script src="{{ url_for('static', filename='admin/products.js') }}"></script>
+{% endblock %}
